@@ -1,0 +1,11 @@
+.weather {
+    &__location {}
+    &__metrics {}
+    &__alert {}
+}
+
+
+.language__active {
+    cursor: pointer;
+    font-weight: 700;
+}

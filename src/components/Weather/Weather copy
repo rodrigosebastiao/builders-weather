@@ -1,0 +1,142 @@
+import "./Weather.scss";
+import Loader from "../Loader";
+import {useEffect, useState, useContext, useReducer} from "react";
+import {WeatherContext} from "../contexts/WeatherProvider";
+
+
+const backend_url = process.env.REACT_APP_API_URL;
+
+interface iProps {
+    device: string
+}
+
+interface Position {
+    coords: {
+        latitude: number
+        longitude: number
+    }
+}
+
+interface Location {
+    country: string
+    lat: number
+    lon: number
+    name: string
+    state: string
+}
+
+
+
+export default function Weather() {
+    const [state, dispatch] = useContext(WeatherContext);
+    console.log("WeatherContext");
+
+    console.log(WeatherContext, WeatherContext);
+    
+    const [userDataLocation, setUserDataLocation] = useState<Location | null>(null);
+    const [climate, setClimate] = useState<any>(null);   
+    const [infoAlert, setInfoAlert] = useState("");
+    
+    useEffect(()=>{
+        const fetchUserLocation = (position: Position) =>{
+            const { coords } = position;
+            const { latitude, longitude } = coords;
+    
+            // http://localhost:4000/location?latitude=-23.5325&longitude=-46.7917
+            fetch(`${backend_url}/location?latitude=${latitude}&longitude=${longitude}`)
+                .then(res=>res.json()) // unecessary for axios
+                .then((data)=>{
+                    setUserDataLocation(data[0]);
+                })
+                .catch((error)=>{
+                    console.log(error);
+                    setInfoAlert(error.message);
+                });
+        }
+        const askUserLocation = () =>{
+            const success = (position: Position) =>{
+                fetchUserLocation(position);
+            }
+            const fail = (error: any) =>{
+                console.log(error);
+                setInfoAlert(error.message);
+            }
+            //showPosition(position.coords.latitude, position.coords.longitude);
+        
+            // var watchID = navigator.geolocation.watchPosition(function(position) {
+            // do_something(position.coords.latitude, position.coords.longitude);
+            // }
+            // );
+        
+            if("geolocation" in navigator){
+                navigator.geolocation.getCurrentPosition(success, fail);
+            } else {
+                setInfoAlert("Geolocation services are not supported by this browser");
+                // Some info to screen: Browser does not suppoort geolocation services
+            }
+        }
+        askUserLocation();
+    }, []);
+
+
+    const fetchClimate = (userDataLocation: Location) =>{
+        // http://localhost:4000/location?latitude=-23.5325&longitude=-46.7917
+        fetch(`http://localhost:4000/weather?&units=${units}&city=${userDataLocation.name}`)
+            .then(res=>res.json()) // unecessary for axios
+            .then((data)=>{
+                setClimate(data);
+            })
+            .catch((error)=>{
+                console.log(error);
+            });
+    }
+    useEffect(()=>{
+        if(userDataLocation){
+            fetchClimate(userDataLocation);        
+        }
+    }, [userDataLocation]);
+
+
+    const celsiusOrFahrenHeight = () => {
+        const round = (s: any) => Math.ceil(s);
+        const tempRound = round(climate.main.temp);
+
+        if(units === "metric"){
+            return <span>{tempRound}°</span>
+        }
+        return <span>°{tempRound}</span>
+    }
+
+
+    if(userDataLocation || infoAlert){
+        return (
+            <div className={`weather  ${units}`}>
+                <h1 style={{visibility: "hidden"}}>Weather</h1>
+
+                {userDataLocation ?
+                   <>
+                       <header>
+                            <main className="weather__location">
+                                <h2 className="weather__city-name" data-testid="weather__city-name">{userDataLocation.name}</h2>
+                            </main>
+                       </header>
+
+                       {climate ?
+                           <div className="weather__climate">
+                               <span 
+                                   className="weather__climate-temp"
+                                   data-testid="weather__climate-temp">
+                                       {celsiusOrFahrenHeight()}
+                               </span>
+                           </div>
+                       : null
+                       }
+                   </>
+                : <span className="weather__alert">{infoAlert}</span>
+                }
+                <footer></footer>
+            </div>
+        );
+    }
+    return <Loader />;
+}
