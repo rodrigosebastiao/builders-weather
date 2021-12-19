@@ -3,7 +3,7 @@ interface IWeatherDaily {
     weather: {
         daily: Array<any>
     }
-    weatherIcon:(condition: string, percent: number)=>any
+    weatherIcon: (iconId: string, description: string) => React.ReactElement
     convertDegreesFormat: (degre: string | number) => any
 }
 
@@ -25,7 +25,7 @@ export default function WeatherDaily({weather, activeLang, weatherIcon, convertD
                         <div className="weather__daily-date">{date(current.dt)}</div>
                         <div className="weather__daily-weather">
                             <span className={`weather__daily-icon ${current.weather[0].main} ${current.clouds ? "percent-" + current.clouds : ""}`}>
-                                {weatherIcon(current.weather[0].icon, current.clouds)}
+                                {weatherIcon(current.weather[0].icon, current.weather[0].description)}
                             </span>
                             <span className="weather__daily-text">{current.weather[0].description}</span>
                         </div>

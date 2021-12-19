@@ -1,13 +1,12 @@
 // import mockLocation from "../../assets/MockAPI/location.json";
 // import mockWeather from "../../assets/MockAPI/weather.json";
 
-import {useThrottledCallback} from 'use-debounce';
+import {useThrottledCallback, useDebouncedCallback} from 'use-debounce';
 import {useEffect, useCallback, useReducer, createContext, useRef} from "react";
 import {reducer, SET_LANGUAGE, SET_LOCATION, SET_WEATHER, SET_ERROR, SYSTEM_UPDATING, SET_UNIT} from "./reducers";
 
 
 const backend_url = process.env.REACT_APP_API_URL;
-const device = window.innerWidth < 1024 ? "mobile" : "desktop";
 
 
 interface Position {
@@ -26,7 +25,7 @@ const WeatherContext = createContext<EnumServiceItems>([]);
 const savedState = localStorage.getItem("state") ? JSON.parse(localStorage.getItem("state") || "") : "";
 
 const initialState = savedState || {
-    device: device,
+    device: window.innerWidth < 1024 ? "mobile" : "desktop",
     location: null, 
     weather: null,
     hasError: false,
@@ -62,7 +61,7 @@ const initialState = savedState || {
 const WeatherProvider = (props: any) => {
     const memoPosition = useRef<any>(null);
     const [state, dispatch] = useReducer<(state: any, action: any) => any>(reducer, initialState);
-    const {units, languages, location, activeLang, isDaylightHours} = state;
+    const {units, languages, location, activeLang, device} = state;
     const currentLanguage = languages[activeLang];
 
     const handleLanguage = useThrottledCallback((selectLang?: string) =>{
@@ -158,6 +157,16 @@ const WeatherProvider = (props: any) => {
     }, [location, getWeather]);
 
 
+    const updateDeviceOnResize = useDebouncedCallback(() =>{
+        //Adjusts for TABLET, SMARTPHONES on rotation, or browser resize
+        state.device = window.innerWidth < 1024 ? "mobile" : "desktop";
+    }, 300);
+
+    useEffect(()=>{
+        window.addEventListener("resize", updateDeviceOnResize);
+    }, [updateDeviceOnResize]);
+
+
     const handleUnitSystem = useThrottledCallback(async (userUnitSelected: "metric" | "imperial") => {
         updateMessageSytems();
         const isUnitMetric = userUnitSelected === "metric";
@@ -215,36 +224,9 @@ const WeatherProvider = (props: any) => {
     }, 5000);
     
 
-    function weatherIcon(condition: string, percent: number){
-        const conditionName = condition.toLowerCase();
-        const isDayOrNight = isDaylightHours ? "day" : "night";
-        
-
-        if(conditionName === "rain" || conditionName === "drizzle"){
-            if(percent <= 25 || conditionName === "drizzle") {
-                return <i className={`wi wi-raindrops`}></i>;
-            }
-            if(percent <= 50) {
-                return <i className={`wi wi-${isDayOrNight}-rain-mix`}></i>;
-            }
-            if(percent <= 75) {
-                return <i className={`wi wi-${isDayOrNight}-rain`}></i>;
-            }
-            return <i className={`wi wi-${isDayOrNight}-rain`}></i>;
-        }
-
-        if(conditionName === "clouds"){
-            if(percent <= 25) {
-                return <i className={`wi ${isDaylightHours ? "wi-day-sunny" : "wi-night-clear"}`}></i>;
-            }
-            if(percent <= 50) {
-                return <i className={`wi wi-${isDayOrNight}-cloudy`}></i>;
-            }
-            if(percent <= 75) {
-                return <i className={`wi ${isDaylightHours ? "wi-sunny-overcast" : "wi-night-alt-partly-cloudy"}`}></i>;
-            }
-            return <i className={`wi wi-cloudy`}></i>;
-        }
+    function weatherIcon(iconId: string, description: string): React.ReactElement {
+        const iconWiwdth = device === "mobile" ? 30 : 40;
+        return <img style={{width: iconWiwdth}} src={`https://openweathermap.org/img/wn/${iconId}@2x.png`} alt={description}/>;
     }
 
     if(!state.hasError){

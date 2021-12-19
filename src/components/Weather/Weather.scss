@@ -60,6 +60,9 @@ $text-color: #fff;
             }
         }
         &-conditions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: var(--font-conditions);
             text-align: center;
         }
@@ -71,6 +74,7 @@ $text-color: #fff;
         }
         &-icon {
             margin-right: 10px;
+            display: inline-block;
         }
     }
 
@@ -80,15 +84,18 @@ $text-color: #fff;
         li {
             display: grid;
             grid-auto-flow: column;
+            align-items: center;
             justify-content: space-between;
         } 
         &-day {
-            margin-bottom: 3vh;
+            margin-bottom: 2vh;
             > div {
             }
         }
       
         &-weather {
+            display: flex;
+            align-items: center;
             min-width: 170px;
         }
         &-text {
@@ -122,31 +129,38 @@ $text-color: #fff;
     &__alert {}
 }
 
-
-
 @include mobile {
+    .weather {
+        &__wrapper {
+            max-width: 75%;
+        }
+    }
+}
+
+@include tablet {
     body {
         .weather {
             header {
                 margin-bottom: 7vw;
             }
             &__wrapper {
-                max-width: 95%;
+                grid-template-columns: auto;
+                align-items: flex-start;
+                max-width: 100%;
+                padding: 0 4%;
             }
             &__update {
                 max-width: 100%;
             }
             &__daily {
-                margin: 4vh 0 2vh;
+                margin: 4vh auto 0;
                 font-size: calc(14px + 5%);
+                li {}
                 &-weather {
-                    min-width: 110px;
                 }
                 &-date {
                 }
                 &-minmax {
-                }
-                 li {
                 }
             }
             &__climate {
@@ -163,13 +177,16 @@ $text-color: #fff;
 @include xxs {
     body {
         .weather {
-            padding: 5vh 0;
+            padding: 4vh 0;
             header {
                 margin-bottom: 4vh;
             }
+            &__wrapper {
+                padding: 0 10px;
+            }
             &__daily {
-                width: 90%;
-                font-size: calc(12px + 5%);
+                width: 100%;
+                font-size: 12px;
                 &-date {
                 }
                 &-minmax {

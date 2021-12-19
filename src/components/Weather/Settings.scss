@@ -121,12 +121,12 @@
 }
 
 
-@include mobile {
+@include tablet {
     body {
         .settings {
             font-size: 14px;
             margin-top: 10vh;
-            grid-template-columns: 39% 47% 14%;
+            grid-template-columns: 43% 42% 15%;
             > div, > ul {
                 justify-content: center;
             }

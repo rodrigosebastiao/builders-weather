@@ -4,7 +4,7 @@ import UpdateButton from "./UpdateButton";
 interface IWheaterClimate {
     weather: any
     currentLanguage: any
-    weatherIcon:(condition: string, percent: number)=>any
+    weatherIcon: (iconId: string, description: string) => React.ReactElement
     updateWeather: ()=>void
     buttonText: string
 }
@@ -29,7 +29,9 @@ export default function WeatherClimate({weather, weatherIcon, currentLanguage, u
             <p 
                 className="weather__climate-conditions"
                 data-testid="weather__climate-conditions">
-                    <span className="weather__climate-icon">{weatherIcon(weather.current.weather[0].main, weather.current.clouds)}</span>
+                    <span className="weather__climate-icon">
+                        {weatherIcon(weather.current.weather[0].icon, weather.current.weather[0].description)}
+                    </span>
                     <span className="weather__climate-description">{weather.current.weather[0].description}</span>
             </p>
 

@@ -16,6 +16,23 @@
     }
 }
 
+@mixin tablet {
+    @media (max-width: 920px) {
+        @content;
+    }
+}
+
+@mixin notebook {
+    @media (min-width: 1024px) AND (max-width: 1360px) {
+        @content;
+    }
+}
+
+@mixin customDevice($min-width, $max-width) {
+    @media (min-width: $min-width) AND (max-width: $max-width) {
+        @content;
+    }
+}
 
 @mixin scroll {
     &::-webkit-scrollbar {
