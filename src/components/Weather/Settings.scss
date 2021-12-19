@@ -1,0 +1,178 @@
+@import "../../assets/styles/mixins.scss";
+
+.settings {
+    position: relative;
+    align-self: end;
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    justify-content: space-between;
+    grid-template-columns: 40% 52% 8%;
+    width: 100%;
+    text-align: center;
+
+    > div, > ul {
+        display: flex;
+        align-items: center;
+    }
+
+    &__languages {        
+        .language {
+            cursor: pointer;
+            display: inline-block;
+            opacity: 0.6;
+            margin-right: 20px;
+            &--active {
+                opacity: 1;
+                font-weight: 700;
+            }
+        }
+    }
+
+    
+    &__themes {
+        position: relative;
+        width: 160px;
+        &-button {
+            cursor: pointer;
+            background: none;
+            outline: none;
+            border: none;
+            padding: 0;
+            color: var(--text-color);
+            font-size: 18px;
+            position: absolute;
+            z-index: 2;
+            &.prev {
+                left: 0;
+            }
+            &.next {
+                right: 0;
+            }
+        }
+
+        .theme__list {
+            width: 100%;           
+            margin: 0;
+            overflow: hidden;
+            height: 35px;
+            @include scroll;
+            .theme {
+                display: none;
+                font-size: 14px;
+                cursor: pointer;
+                width: 120px;
+                margin: 0 auto;
+                height: 30px;
+                line-height: 30px;
+                border-radius: 30px;
+                &--active {
+                    display: block;
+                    background: rgba(255, 255, 255, 0.2);
+                }
+                &::first-letter {
+                    text-transform: uppercase;
+                }
+            }
+            &-wrapper {
+                position: absolute;
+                top: auto;
+                right: 0;
+                left: 0;
+                bottom: auto;
+                height: 30px;
+                &:hover {
+                    height: auto;
+                    overflow: auto;                    
+                    .theme__list {
+                        overflow: auto;
+                        height: 100px;
+                        padding: 0 0 37px;
+                    }
+                    .theme {
+                        display: block;
+                        background: transparent;
+                        &:hover{
+                            background: rgba(255, 255, 255, 0.2);
+                        }
+                    }
+                }
+            }         
+        }
+    }
+
+    
+    &__units {
+        font-size: var(--font-units);
+        > span:not(.separator){
+            cursor: pointer;
+            display: inline-block;
+        }
+        .separator {
+            opacity: 0.2;
+        }
+        span {
+            opacity: 0.6;
+            &.active{
+                opacity: 1;
+            }
+        }
+    }
+}
+
+
+@include mobile {
+    body {
+        .settings {
+            font-size: 14px;
+            margin-top: 10vh;
+            grid-template-columns: 39% 47% 14%;
+            > div, > ul {
+                justify-content: center;
+            }
+            &__themes {
+                font-size: 12px;
+                width: auto;
+                &-button {
+                    top: auto;
+                }
+                .theme {
+                    &__list {
+                        &-wrapper {
+                            pointer-events: none;
+                        }
+                        .theme {
+                            width: 100px;
+                        }
+                    }
+                }
+            }
+            &__languages {
+                display: grid;
+                align-items: center;
+                font-size:12px;
+                .language {
+                    margin: 5px 10px;
+                }
+            }
+            &__units {
+                min-width: 60px;
+                span {
+                    position: relative;
+                    display: block;
+                    &.imperial {
+                        top: -8px;
+                        right: 8px;
+                    }
+                    &.separator {
+                        margin: -8px;
+                    }
+                    &.metric {
+                        top: 8px;
+                        left: 8px;
+                    }
+                }
+            }
+        }
+    }
+}

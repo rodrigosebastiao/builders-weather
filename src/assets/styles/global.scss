@@ -1,0 +1,21 @@
+@import "variables";
+@import "mixins";
+@import "./weather/weather-icons";
+
+.system__updating {
+    text-align: center;
+    display: block;
+    font-size: 14px;
+    margin-top: 8px;
+    min-height: 17px;
+}
+
+.separator {
+    display: inline-block;
+    margin: 0 7px;
+}
+
+.separator-short {
+    display: inline-block;
+    margin: 0 5px;
+}

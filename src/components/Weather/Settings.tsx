@@ -1,30 +1,50 @@
+import "./Settings.scss";
+import ThemeBackground from "../ThemeBackground";
+
 
 interface ISettings {
-    languages: any
-    languageOptions: Array<any>
+    isUnitMetric: string
+    activeLang: string
+    currentLanguage: Object
+    languageListOptions: Array<any>
     handleLanguage: (lang: string)=>void
+    handleUnitSystem: (unit?: string | undefined) => void
 }
 
 
+export default function Settings({
+    currentLanguage,
+    isUnitMetric, 
+    activeLang, 
+    languageListOptions, 
+    handleUnitSystem, 
+    handleLanguage
+}: ISettings) {
 
-export default function Settings({languageOptions, languages, handleLanguage}: ISettings) {
+
     return (
-    <ul className="weather__settings">
-        <li className="weather__settings__languages">
-            <ul>
-                {languageOptions.map((lang: any)=>{
+        <div className="settings">
+            <ThemeBackground />
+
+            <ul className="settings__languages">
+                {languageListOptions.map((lang: any)=>{
                     return (
                         <li 
                             key={lang.id}
-                            className={`language__${languages.active === lang.id? "active" : ""}`}
+                            className={`language ${lang.id} ${activeLang === lang.id ? "language--active" : ""}`}
                             onClick={()=>handleLanguage(lang.id)}
-                            >
+                        >
                             {lang.prop.name}
                         </li>
                     )
                 })}
             </ul>
-        </li>
-    </ul>
+
+            <div className="settings__units">
+                <span className={`imperial ${isUnitMetric ? "" : "active"}`} onClick={()=>handleUnitSystem("imperial")}>°F</span>
+                <span className="separator"> / </span>
+                <span className={`metric ${isUnitMetric ? "active" : ""}`} onClick={()=>handleUnitSystem("metric")}>C°</span>
+            </div>
+        </div>
     )
 }

@@ -1,4 +1,8 @@
-# canGetting Started with Create React App
+# Create React App + Backend
+
+Run frontend/backend simutaneously: **npm run all**
+
+Never **FORGET** to start BACKEND, see README_BACKEND
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

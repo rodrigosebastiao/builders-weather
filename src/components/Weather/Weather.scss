@@ -1,11 +1,180 @@
+@import "../../assets/styles/global.scss";
+@import "../ThemeBackground/themes.scss";
+
+:root {
+    --background-color: #2aa3f3;
+    --text-color: #fff;
+    --main-degree: 85px;
+    --font-size: 18px;
+    --font-size-city: 1.3vw;
+    --font-units: 14px;
+    --font-degree: 24px;
+    --font-conditions: 16px;
+    --font-family-main: 'Roboto', sans-serif;
+    --font-family-sec: "";
+}
+
+$text-color: #fff;
+
 .weather {
-    &__location {}
-    &__metrics {}
+    user-select: none;
+    padding: 5vh 0;
+    height: 100vh;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    &__wrapper {
+        margin: 0 auto;
+        display: grid;
+        align-items: center;
+        // grid-template-rows: 20% 20% 30% 10%;
+        grid-template-rows: 10% 40% 20% auto;
+        grid-auto-flow: row;
+        min-width: 320px;
+        max-width: 50vw;
+        height: 100%;
+    }
+    header {
+        align-self: start;
+        margin-bottom: 3vw;
+        text-align: center;
+    }
+    &__location {
+        text-align: center;
+    }
+    &__city {
+        &-name {
+            font-size: clamp(18px, var(--font-size-city), 30px);
+        }
+    }
+    &__climate {
+        display: grid;
+        &-temp {
+            position: relative;
+            font-size: clamp(85px, var(--main-degree), 85px);
+            text-align: center;
+            .deg {
+                font-size: clamp(14px, var(--main-degree), 40px);
+                position: absolute;
+                top: calc(var(--main-degree) * 0.1);
+                margin-left: 10px;
+            }
+        }
+        &-conditions {
+            font-size: var(--font-conditions);
+            text-align: center;
+        }
+        &-description {
+            display: inline-block;
+            &::first-letter{
+                text-transform: uppercase;
+            }
+        }
+        &-icon {
+            margin-right: 10px;
+        }
+    }
+
+    &__daily {
+        margin: 2vh 0;
+        width: 100%;  
+        li {
+            display: grid;
+            grid-auto-flow: column;
+            justify-content: space-between;
+        } 
+        &-day {
+            margin-bottom: 3vh;
+            > div {
+            }
+        }
+      
+        &-weather {
+            min-width: 170px;
+        }
+        &-text {
+            display: inline-block;
+            &::first-letter {
+                text-transform: uppercase;
+            }
+        }
+        &-icon {
+            margin-right: 10px;
+        }
+        &-minmax {
+        }
+    }
+
+    &__update {
+        cursor: pointer;
+        font-size: 18px;
+        color: var(--text-color);
+        background: rgba($text-color, 0.2);
+        border-radius: 40px;
+        height: 35px;
+        line-height: 35px;
+        width: 100%;
+        max-width: 240px;
+        margin: 5vh auto 30px;
+        border: none;
+        outline: none;
+    }
+
     &__alert {}
 }
 
 
-.language__active {
-    cursor: pointer;
-    font-weight: 700;
+
+@include mobile {
+    body {
+        .weather {
+            header {
+                margin-bottom: 7vw;
+            }
+            &__wrapper {
+                max-width: 95%;
+            }
+            &__update {
+                max-width: 100%;
+            }
+            &__daily {
+                margin: 4vh 0 2vh;
+                font-size: calc(14px + 5%);
+                &-weather {
+                    min-width: 110px;
+                }
+                &-date {
+                }
+                &-minmax {
+                }
+                 li {
+                }
+            }
+            &__climate {
+                &-temp {
+                    .deg {
+                        
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include xxs {
+    body {
+        .weather {
+            padding: 5vh 0;
+            header {
+                margin-bottom: 4vh;
+            }
+            &__daily {
+                width: 90%;
+                font-size: calc(12px + 5%);
+                &-date {
+                }
+                &-minmax {
+                }
+            }
+        }
+    }
 }

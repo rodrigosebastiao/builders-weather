@@ -1,7 +1,6 @@
 import {WeatherProvider} from "./components/contexts/WeatherProvider";
 import Weather from './components/Weather/Weather';
-// import Background from './components/Background/Background';
-import './App.css';
+// import './App.css';
 
 
 function App() {
@@ -9,7 +8,6 @@ function App() {
     <div className="App" data-testid="App">
       <WeatherProvider>
         <Weather />
-        {/* <Background/> */}
       </WeatherProvider>
     </div>
   );
